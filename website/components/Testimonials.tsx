@@ -1,50 +1,74 @@
 import styles from "./Testimonials.module.css";
 
-interface Testimonial {
+// PH launch post for agentmemory. The featured.svg badge endpoint
+// renders the live upvote count + day-rank server-side, so the
+// number on the page stays current without any client refresh.
+// Replace the post_id if a future launch shifts to a new post.
+const PH_POST_ID = 773058;
+const PH_POST_URL = "https://www.producthunt.com/posts/agent-memory-dev";
+const PH_DISCUSSION_URL =
+  "https://www.producthunt.com/p/agent-memory-dev/how-do-you-found-agentmemory-so-far-happy-to-help";
+const PH_BADGE_URL = `https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=${PH_POST_ID}&theme=dark`;
+
+// "Use cases" — quotes that describe how a builder is using
+// agentmemory in production. Each one carries an explicit
+// `useCase` line so the framing is concrete (not just "I like it").
+interface UseCase {
+  name: string;
+  useCase: string;
+  quote: string;
+  href: string;
+}
+
+const USE_CASES: UseCase[] = [
+  {
+    name: "Peter Neyra",
+    useCase: "Tracking product pivots over time",
+    quote:
+      "I started using it to help with the memories of how my product has pivoted over time. It was surprisingly accurate. Picked up on things that I moved away from, decided we'd badly done, etc.",
+    href: PH_DISCUSSION_URL,
+  },
+  {
+    name: "Pranav Prakash",
+    useCase: "Two weeks of production use",
+    quote:
+      "Been using it for 2 weeks, and I definitely see improvements.",
+    href: PH_DISCUSSION_URL,
+  },
+];
+
+// "Endorsements" — shorter quotes that position the product, more
+// social-proof than use-case. Kept tight so the grid balances.
+interface Endorsement {
   name: string;
   quote: string;
   href: string;
 }
 
-// Quotes are verbatim from the Product Hunt discussion thread.
-// Source: https://www.producthunt.com/p/agent-memory-dev/how-do-you-found-agentmemory-so-far-happy-to-help
-// Each quote links back to the comment so a reader can verify.
-const ITEMS: Testimonial[] = [
-  {
-    name: "Peter Neyra",
-    quote:
-      "I started using it to help with the memories of how my product has pivoted over time. It was surprisingly accurate. Picked up on things that I moved away from, decided we'd badly done, etc. So far, so good.",
-    href: "https://www.producthunt.com/p/agent-memory-dev/how-do-you-found-agentmemory-so-far-happy-to-help",
-  },
+const ENDORSEMENTS: Endorsement[] = [
   {
     name: "Alper Tayfur",
     quote:
-      "Tackles one of the biggest pain points with coding agents: losing useful project context across sessions without bloating the context window. The searchable memory + visibility into what the agent remembers feels especially valuable.",
-    href: "https://www.producthunt.com/p/agent-memory-dev/how-do-you-found-agentmemory-so-far-happy-to-help",
-  },
-  {
-    name: "Pranav Prakash",
-    quote:
-      "Been using it for 2 weeks, and I definitely see improvements.",
-    href: "https://www.producthunt.com/p/agent-memory-dev/how-do-you-found-agentmemory-so-far-happy-to-help",
+      "Tackles one of the biggest pain points with coding agents: losing useful project context across sessions without bloating the context window.",
+    href: PH_DISCUSSION_URL,
   },
   {
     name: "Mia Taylor",
     quote:
-      "Really like the direction so far, especially the focus on making memory actually useful for agents instead of just storing context endlessly.",
-    href: "https://www.producthunt.com/p/agent-memory-dev/how-do-you-found-agentmemory-so-far-happy-to-help",
+      "The focus on making memory actually useful for agents instead of just storing context endlessly.",
+    href: PH_DISCUSSION_URL,
   },
   {
     name: "Thomas Hall",
     quote:
-      "One thing I noticed while trying different agent frameworks is that memory often becomes just more noise over time. Agentmemory feels more intentional compared to a lot of tools in this space.",
-    href: "https://www.producthunt.com/p/agent-memory-dev/how-do-you-found-agentmemory-so-far-happy-to-help",
+      "Memory often becomes just more noise over time. Agentmemory feels more intentional compared to a lot of tools in this space.",
+    href: PH_DISCUSSION_URL,
   },
   {
     name: "Zoe Alexandra",
     quote:
       "Tried it briefly — feels clean and easy to get started with.",
-    href: "https://www.producthunt.com/p/agent-memory-dev/how-do-you-found-agentmemory-so-far-happy-to-help",
+    href: PH_DISCUSSION_URL,
   },
 ];
 
@@ -55,6 +79,25 @@ export function Testimonials() {
       aria-labelledby="testimonials-title"
     >
       <div className={styles.inner}>
+        <div className={styles.badgeRow}>
+          <a
+            href={PH_POST_URL}
+            target="_blank"
+            rel="noopener"
+            aria-label="Featured on Product Hunt"
+            className={styles.badgeLink}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={PH_BADGE_URL}
+              alt="Featured on Product Hunt — live upvote count"
+              width={250}
+              height={54}
+              className={styles.badge}
+            />
+          </a>
+        </div>
+
         <div id="testimonials-title" className={styles.eyebrow}>
           BUILDERS USING AGENTMEMORY
         </div>
@@ -62,10 +105,39 @@ export function Testimonials() {
           IN THE <span className={styles.accent}>WILD.</span>
         </h2>
         <p className={styles.lede}>
-          Quotes from the Product Hunt launch thread. Verbatim, linked back to source.
+          Verbatim from the Product Hunt launch thread. Each card
+          links back to the source comment.
         </p>
+
+        <div className={styles.sectionLabel}>HOW THEY USE IT</div>
+        <div className={styles.useCases}>
+          {USE_CASES.map((u) => (
+            <a
+              key={u.name}
+              className={styles.useCaseCard}
+              href={u.href}
+              target="_blank"
+              rel="noopener"
+              aria-label={`${u.name}'s comment on Product Hunt`}
+            >
+              <div className={styles.useCaseTag}>{u.useCase}</div>
+              <p className={styles.useCaseQuote}>
+                <span className={styles.quoteMark} aria-hidden>
+                  &ldquo;
+                </span>
+                {u.quote}
+              </p>
+              <div className={styles.author}>
+                <span className={styles.name}>{u.name}</span>
+                <span className={styles.source}>Product Hunt ↗</span>
+              </div>
+            </a>
+          ))}
+        </div>
+
+        <div className={styles.sectionLabel}>WHAT THEY SAY</div>
         <div className={styles.grid}>
-          {ITEMS.map((t) => (
+          {ENDORSEMENTS.map((t) => (
             <a
               key={t.name}
               className={styles.card}
@@ -74,10 +146,12 @@ export function Testimonials() {
               rel="noopener"
               aria-label={`${t.name}'s comment on Product Hunt`}
             >
-              <span className={styles.quoteMark} aria-hidden>
-                &ldquo;
-              </span>
-              <p className={styles.quote}>{t.quote}</p>
+              <p className={styles.quote}>
+                <span className={styles.quoteMark} aria-hidden>
+                  &ldquo;
+                </span>
+                {t.quote}
+              </p>
               <div className={styles.author}>
                 <span className={styles.name}>{t.name}</span>
                 <span className={styles.source}>Product Hunt ↗</span>
